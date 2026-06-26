@@ -247,3 +247,13 @@ kaggle.json
 # 가상환경
 venv/
 .venv/
+
+# Multiple IDE Folder
+.idea
+.vscode
+
+# MAC System Folder
+.DS_Store
+
+# Python Package
+.venv
