@@ -8,7 +8,7 @@ from tqdm import tqdm
 IMAGE_ROOT = Path("../../data/raw/train_images")
 ANNOT_ROOT = Path("../../data/raw/train_annotations")
 
-OUTPUT = Path("../../data/processed/yolo")
+OUTPUT = Path("../../data/processed/shared")
 
 TRAIN_RATIO = 0.8
 SEED = 42
