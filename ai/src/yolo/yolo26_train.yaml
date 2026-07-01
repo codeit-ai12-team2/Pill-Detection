@@ -6,4 +6,6 @@ imgsz: 640
 
 optimizer: auto
 
+mosaic: 0.5
+
 seed: 42

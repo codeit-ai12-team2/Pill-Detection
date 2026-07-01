@@ -15,6 +15,7 @@ YOLO_DIR = Path(__file__).parent
 RUNS_DIR = YOLO_DIR / "runs/detect"
 
 METRIC_COLUMNS = {
+    "mAP50": "metrics/mAP50(B)",
     "mAP50-95": "metrics/mAP50-95(B)",
     "recall": "metrics/recall(B)",
 }
@@ -57,20 +58,22 @@ def summarize_run(run_dir: Path) -> dict | None:
     df = pd.read_csv(csv_path)
     df.columns = df.columns.str.strip()
 
-    map_col = METRIC_COLUMNS["mAP50-95"]
+    map50_col = METRIC_COLUMNS["mAP50"]
+    map95_col = METRIC_COLUMNS["mAP50-95"]
     recall_col = METRIC_COLUMNS["recall"]
 
-    if map_col not in df.columns:
-        print(f"[skip] {csv_path} : '{map_col}' 컬럼 없음")
+    if map95_col not in df.columns:
+        print(f"[skip] {csv_path} : '{map95_col}' 컬럼 없음")
         return None
 
-    best_row = df.loc[df[map_col].idxmax()]
+    best_row = df.loc[df[map95_col].idxmax()]
 
     return {
         "run": run_dir.name,
         "best_epoch": int(best_row["epoch"]),
         "total_epochs": int(df["epoch"].max()),
-        "mAP50-95": round(best_row[map_col], 4),
+        "mAP50": round(best_row[map50_col], 4),
+        "mAP50-95": round(best_row[map95_col], 4),
         "recall": round(best_row[recall_col], 4),
     }
 
@@ -87,17 +90,18 @@ def show_results(run_dirs: list[Path]) -> pd.DataFrame:
     result_df = pd.DataFrame(summaries)
     result_df = result_df.sort_values(by="mAP50-95", ascending=False).reset_index(drop=True)
 
-    print(f"\n {'model':<20} {'epoch':>12} {'mAP50-95':>14} {'recall':>8}")
+    print(f"\n {'model':<20} {'epoch':>12} {'mAP50':>13} {'mAP50-95':>10} {'recall':>9}")
     for _, row in result_df.iterrows():
         print(
             f"{row['run']:<25} "
             f"{row['best_epoch']:>4}/{row['total_epochs']:<5} "
+            f"{row['mAP50']:>10} "
             f"{row['mAP50-95']:>10} "
             f"{row['recall']:>10}"
         )
 
     best = result_df.iloc[0]
-    print(f"\n최고 성능: {best['run']} | mAP50-95  {best['mAP50-95']} | recall  {best['recall']}")
+    print(f"\n최고 성능: {best['run']} | mAP50  {best['mAP50']} | mAP50-95  {best['mAP50-95']} | recall  {best['recall']}")
 
     return result_df
 
