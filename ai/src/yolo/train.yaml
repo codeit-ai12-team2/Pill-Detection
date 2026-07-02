@@ -1,18 +1,24 @@
 data: ../../data/processed/yolo/dataset.yaml
 
 epochs: 100
-batch: 8
+batch: 16
 imgsz: 640
 
 optimizer: auto
 
-mosaic: 0.5
+mosaic: 0.0
 mixup: 0.0
-copy_paste: 0.1
+copy_paste: 0.0
+hsv_h: 0.0
+hsv_s: 0.0
+hsv_v: 0.0
+degrees: 0.0
+translate: 0.0
+scale: 0.0
+shear: 0.0
+perspective: 0.0
+flipud: 0.0
+fliplr: 0.0
+erasing: 0.0
 
 seed: 42
-
-degrees: 5
-flipud: 0
-perspective: 0.0003
-erasing: 0.4
